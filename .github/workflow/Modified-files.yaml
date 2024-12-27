@@ -1,40 +1,34 @@
-name: Detect Modified Files
+name: Track Recently Modified Files
 
 on:
   push:
     branches:
-      - master  # Replace with your branch name
+      - master
   pull_request:
-    branches: 
-      - master  # Replace with your branch name
+    branches:
+      - master
 
 jobs:
-  detect-changes:
+  track-modifications:
     runs-on: ubuntu-latest
 
     steps:
-    # Step 1: Check out the repository with full commit history
-    - name: Checkout Repository
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 0  # Fetch the full history to enable git diff
+      # Step 1: Checkout the repository code
+      - name: Checkout Code
+        uses: actions/checkout@v3
 
-    # Step 2: Detect Modified Files
-    - name: Detect Modified Files
-      id: modified_files
-      run: |
-        # Get modified files and replace newlines with spaces
-        MODIFIED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | sed 's|src/main/java|d:/myproject/src/main/java|g' | tr '\n' ' ')
-        
-        # Save the modified files to a text file
-        echo "$MODIFIED_FILES" > modified_files.txt
-        
-        # Export the modified files as an environment variable
-        echo "MODIFIED_FILES=$MODIFIED_FILES" >> $GITHUB_ENV
+      # Step 2: Get the list of recently modified files
+      - name: Get Recently Modified Files
+        id: modified-files
+        run: |
+          git fetch --all
+          git diff --name-only HEAD^ HEAD > modified-files.txt
+          echo "Modified files:"
+          cat modified-files.txt
 
-    # Step 3: Upload modified_files.txt as an artifact
-    - name: Upload Modified Files
-      uses: actions/upload-artifact@v3
-      with:
-        name: modified-files
-        path: modified_files.txt
+      # Step 3: Upload the modified files list as an artifact
+      - name: Upload Modified Files Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: modified-files
+          path: modified-files.txt
