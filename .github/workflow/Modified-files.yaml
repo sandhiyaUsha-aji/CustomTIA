@@ -1,4 +1,4 @@
- name: Track Recently Modified Files
+name: Track Recently Modified Files
 
 on:
   push:
