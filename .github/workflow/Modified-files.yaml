@@ -5,7 +5,7 @@ on:
     branches:
       - master  # Replace with your branch name
   pull_request:
-    branches:
+    branches: 
       - master  # Replace with your branch name
 
 jobs:
