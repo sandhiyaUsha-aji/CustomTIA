@@ -22,7 +22,12 @@ jobs:
         id: modified-files
         run: |
           git fetch --all
-          git diff --name-only HEAD^ HEAD > modified-files.txt
+          if git rev-parse HEAD^ > /dev/null 2>&1; then
+            git diff --name-only HEAD^ HEAD > modified-files.txt
+          else
+            echo "Initial commit detected. Listing all files:" > modified-files.txt
+            git ls-files >> modified-files.txt
+          fi
           echo "Modified files:"
           cat modified-files.txt
 
@@ -32,4 +37,3 @@ jobs:
         with:
           name: modified-files
           path: modified-files.txt
-
