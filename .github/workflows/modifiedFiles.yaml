@@ -1,1 +1,35 @@
+name: Track Recently Modified Files
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  track-modifications:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Get the list of recently modified files
+      - name: Get Recently Modified Files
+        id: modified-files
+        run: |
+          git fetch --all
+          git diff --name-only HEAD^ HEAD > modified-files.txt
+          echo "Modified files:"
+          cat modified-files.txt
+
+      # Step 3: Upload the modified files list as an artifact
+      - name: Upload Modified Files Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: modified-files
+          path: modified-files.txt
 
