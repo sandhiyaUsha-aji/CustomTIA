@@ -14,7 +14,7 @@ public class LoginSourceCode {
 	}
 	
 	public static String SignUp() {
-		System.out.println(" Signup if you are new  user");
+		System.out.println(" Signup me if you are new  user");
 		return "SignUp";
 	}
 public static String Home() {

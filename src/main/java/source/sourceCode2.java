@@ -5,7 +5,7 @@ public class sourceCode2 {
 	show();
 	}
 	public static String show() {
-		System.out.println("showw");
+		System.out.println("show");
 		return "show";
 }
 }
