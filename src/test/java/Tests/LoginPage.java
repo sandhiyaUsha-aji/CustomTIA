@@ -29,7 +29,7 @@ public class LoginPage {
 	}
 	@Test
 	public void welcome() {
-		System.out.println("Hello everyone");
+		System.out.println(LoginSourceCode.Home());
 	}
 
 }

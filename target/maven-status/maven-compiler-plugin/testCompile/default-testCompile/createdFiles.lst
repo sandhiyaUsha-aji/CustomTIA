@@ -1,2 +1,4 @@
-testComponents\CodeToTestMapper.class
+Tests\ProductPage.class
+testComponents\ImpactedTests.class
 Tests\LoginPage.class
+testComponents\CodeToTestMapper.class
