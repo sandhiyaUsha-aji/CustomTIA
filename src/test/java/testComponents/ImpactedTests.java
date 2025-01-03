@@ -20,6 +20,7 @@ public class ImpactedTests {
             String modifiedFilesPath = "D:\\MyProject\\src\\test\\java\\Data\\ModifiedFiles.txt";
             String codeToTestJsonPath = "D:\\MyProject\\src\\test\\java\\Data\\CodeToTest.json";
             String testNgXmlPath = "D:\\MyProject\\testng1.xml";
+            String projectSrcPath = "D:\\MyProject\\src\\test\\java\\";
 
             // Read modified files
             List<String> modifiedFiles = Files.readAllLines(Paths.get(modifiedFilesPath));
@@ -37,8 +38,8 @@ public class ImpactedTests {
             // Normalize paths in codeToTest.json
             Map<String, String> normalizedCodeToTestMap = normalizeCodeToTestMap(codeToTestMap);
 
-            // Find impacted test classes
-            Set<String> impactedTestClasses = findImpactedTestClasses(normalizedModifiedFiles, normalizedCodeToTestMap);
+            // Find impacted test classes with package names
+            Set<String> impactedTestClasses = findImpactedTestClassesWithPackages(normalizedModifiedFiles, normalizedCodeToTestMap, projectSrcPath);
 
             // Output impacted test classes
             if (impactedTestClasses.isEmpty()) {
@@ -82,16 +83,41 @@ public class ImpactedTests {
         return normalizedMap;
     }
 
-    private static Set<String> findImpactedTestClasses(List<String> modifiedFiles, Map<String, String> normalizedCodeToTestMap) {
+    private static Set<String> findImpactedTestClassesWithPackages(List<String> modifiedFiles, Map<String, String> normalizedCodeToTestMap, String projectSrcPath) {
         Set<String> impactedTestClasses = new HashSet<>();
+        File projectDir = new File(projectSrcPath);
+
         for (Map.Entry<String, String> entry : normalizedCodeToTestMap.entrySet()) {
-            String testClass = entry.getKey();
-            String sourceFilePath = entry.getValue();
+            String testClass = entry.getKey(); // Test class name
+            String sourceFilePath = entry.getValue(); // Source file path
+
             if (modifiedFiles.contains(sourceFilePath)) {
-                impactedTestClasses.add(testClass); // Add the test class name if its source file is modified.
+                String fullyQualifiedClassName = findFullyQualifiedName(testClass, projectDir);
+                if (fullyQualifiedClassName != null) {
+                    impactedTestClasses.add(fullyQualifiedClassName);
+                }
             }
         }
         return impactedTestClasses;
+    }
+
+    private static String findFullyQualifiedName(String className, File directory) {
+        for (File file : directory.listFiles()) {
+            if (file.isDirectory()) {
+                String result = findFullyQualifiedName(className, file);
+                if (result != null) {
+                    return result;
+                }
+            } else if (file.getName().equals(className + ".java")) {
+                String packagePath = file.getParent().replace("\\", ".").replace("/", ".");
+                int srcIndex = packagePath.indexOf(".java.") + 6; // Adjust index to start after "src.java"
+                if (srcIndex > 0 && srcIndex < packagePath.length()) {
+                    packagePath = packagePath.substring(srcIndex);
+                }
+                return packagePath + "." + className;
+            }
+        }
+        return null;
     }
 
     private static void generateTestNGXml(Set<String> impactedTestClasses, String outputPath) throws Exception {

@@ -3,7 +3,8 @@
 <suite name="ImpactedTests">
   <test name="Test">
     <classes>
-      <class name="LoginPage"/>
+      <class name="Tests.ProductPage"/>
+      <class name="Tests.LoginPage"/>
     </classes>
   </test>
 </suite>
