@@ -37,3 +37,8 @@ jobs:
         with:
           name: modified-files
           path: modified-files.txt
+      - name: Download Modified Files Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: modified-files
+          path: ./modified-files
