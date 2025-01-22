@@ -18,7 +18,7 @@ public class LoginSourceCode {
 		return "SignUp";
 	}
 public static String Home() {
-	System.out.println("Welcome dear user");
+	System.out.println("Welcome");
 	return "Home"; 
 }
 }
