@@ -16,6 +16,8 @@ jobs:
       # Step 1: Checkout the repository code
       - name: Checkout Code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       # Step 2: Get the list of recently modified files
       - name: Get Recently Modified Files
@@ -37,8 +39,13 @@ jobs:
         with:
           name: modified-files
           path: modified-files.txt
+
+      # Step 4: Download and verify the modified files artifact
       - name: Download Modified Files Artifact
         uses: actions/download-artifact@v3
         with:
           name: modified-files
-          path: ./modified-files
+          path: ./modified-files.txt
+
+      - name: Show Downloaded Artifact
+        run: cat ./modified-files.txt
