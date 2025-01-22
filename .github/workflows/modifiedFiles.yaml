@@ -40,12 +40,4 @@ jobs:
           name: modified-files
           path: modified-files.txt
 
-      # Step 4: Download and verify the modified files artifact
-      - name: Download Modified Files Artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: modified-files
-          path: ./modified-files.txt
-
-      - name: Show Downloaded Artifact
-        run: cat ./modified-files.txt
+     
