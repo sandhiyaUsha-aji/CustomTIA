@@ -9,12 +9,12 @@ public class LoginSourceCode {
 
 	}
 	public static String Login() {
-		System.out.println("Login me if you already have account");
+		System.out.println("Login me ");
 		return "Login";
 	}
 	
 	public static String SignUp() {
-		System.out.println(" Signup me if you are new  user");
+		System.out.println(" signup");
 		return "SignUp";
 	}
 public static String Home() {
